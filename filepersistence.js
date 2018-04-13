@@ -1,5 +1,3 @@
-//var url = require('url');
-//var RSVP = require('rsvp');
 var storage = require('node-persist');
 
 function FileSystemPersistence(logger, opts) {
