@@ -11,7 +11,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://bitbucket.org/atlassianlabs/atlassian-connect-express-redis"
+        "url": "https://github.com/kg73/atlassian-connect-express-file-persistence"
     },
     "keywords": [
         "atlassian",
