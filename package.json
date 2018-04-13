@@ -1,0 +1,24 @@
+{
+    "name": "atlassian-connect-express-file-persistence",
+    "version": "0.1.1",
+    "description": "File System adapter for Atlassian Connect Express",
+    "main": "filepersistence.js",
+    "dependencies": {
+        "node-persist": "latest"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://bitbucket.org/atlassianlabs/atlassian-connect-express-redis"
+    },
+    "keywords": [
+        "atlassian",
+        "connect",
+        "express",
+        "persistence"
+    ],
+    "author": "Kevin Gysberg",
+    "license": "Apache 2.0"
+}
