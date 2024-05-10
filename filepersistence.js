@@ -5,7 +5,7 @@ function FileSystemPersistence(logger, opts) {
     var self = this;
 
     self.config = {
-        storageDir: opts.storageDir || 'Persistence',
+        dir: opts.storageDir || 'Persistence',
         logging: opts.logging || true,
         encoding: opts.encoding || 'utf8'
     }
@@ -21,12 +21,25 @@ function FileSystemPersistence(logger, opts) {
 
 var proto = FileSystemPersistence.prototype;
 
-function redisKey(key, clientKey) {
+function combinedKey(key, clientKey) {
     return [clientKey, key].join(':');
 }
 
-function combinedKey(key, clientKey) {
-    return [clientKey, key].join(':');
+function installationKey(forgeInstallationId) {
+  return `installation:${forgeInstallationId};`;
+};
+
+
+proto.saveInstallation = async function(val, clientKey) {
+    var self = this;
+    const clientSetting = await self.set("clientInfo", val, clientKey);
+
+    const forgeInstallationId = clientSetting.installationId;
+    if (forgeInstallationId) {
+      await self.associateInstallations(forgeInstallationId, clientKey);
+    }
+
+    return clientSetting;
 }
 
 proto.get = async function(key, clientKey) {
@@ -53,6 +66,24 @@ proto.getAllClientInfos = async function() {
 proto.isMemoryStore = function() {
     return false;
 };
+
+proto.associateInstallations = async function(forgeInstallationId, clientKey) {
+    await this.client.setItem(installationKey(forgeInstallationId), clientKey);
+}
+
+proto.deleteAssociation = async function(forgeInstallationId) {
+    await this.client.removeItem(installationKey(forgeInstallationId));
+}
+
+proto.getClientSettingsForForgeInstallation = async function(forgeInstallationId) {
+    const clientKey = await this.client.getItem(
+      installationKey(forgeInstallationId)
+    );
+    if (!clientKey) {
+      return null;
+    }
+    return this.get("clientInfo", clientKey);
+}
 
 module.exports = function(logger, opts) {
     return new FileSystemPersistence(logger, opts);
