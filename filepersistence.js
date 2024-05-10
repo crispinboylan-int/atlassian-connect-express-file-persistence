@@ -10,13 +10,9 @@ function FileSystemPersistence(logger, opts) {
         encoding: opts.encoding || 'utf8'
     }
 
-    storage.init(self.config, function(initiatedClient) {
-        self.client = initiatedClient;
-    })
+    self.client = storage.create(self.config);
 
-    self.client = storage.init(self.config);
-
-    self.client = storage.create(self.config)
+    self.client.initSync();
 }
 
 var proto = FileSystemPersistence.prototype;
